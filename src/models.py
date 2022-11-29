@@ -14,6 +14,7 @@ class Person(Base):
     # Notice that each column is also a normal Python instance attribute.
     id = Column(Integer, primary_key=True)
     name = Column(String(250), nullable=False)
+    post_id = Column(Integer, ForeignKey('post.id'))
 
 class Address(Base):
     __tablename__ = 'address'
@@ -28,6 +29,28 @@ class Address(Base):
 
     def to_dict(self):
         return {}
+class Post(Base):
+    __tablename__ = 'post'
+    id = Column(Integer, primary_key=True)
+    location = Column(String(250))
+    text = Column(String(250))
+    comments = relationship('Comment', backref='post', lazy=True)
+
+
+class Comment(Base):
+    __tablename__ = 'comment'
+    id = Column(Integer, primary_key=True)
+    text = Column(String(250))
+    post_id = Column(Integer, ForeignKey('post.id'))
+
+class Likedislike(Base):
+    __tablename__ = 'Likedislike'
+    id = Column(Integer, primary_key=True)
+    like = Column(Integer)
+    comment_id = Column(Integer, ForeignKey('comment.id'))
+
+    
+
 
 ## Draw from SQLAlchemy base
 try:
